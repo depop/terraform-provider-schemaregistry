@@ -1,0 +1,61 @@
+{
+    "type": "record",
+    "name": "ProductLike",
+    "namespace": "com.depop.model",
+    "fields": [
+        {
+            "name": "eventType",
+            "type": "string"
+        },
+        {
+            "name": "eventTimestamp",
+            "type": "long"
+        },
+        {
+            "name": "eventSender",
+            "type": "string"
+        },
+        {
+            "name": "data",
+            "type": [
+                {
+                    "type": "record",
+                    "name": "LikeData",
+                    "fields": [
+                        {
+                            "name": "userId",
+                            "doc": "The user whose product received the like",
+                            "type": "long"
+                        },
+                        {
+                            "name": "productId",
+                            "doc": "The product that was liked",
+                            "type": "long"
+                        },
+                        {
+                            "name": "senderIds",
+                            "doc": "The user who liked the product",
+                            "type": "long"
+                        }
+                    ]
+                },
+                {
+                    "type": "record",
+                    "name": "UnlikeData",
+                    "fields": [
+                        {
+                            "name": "userId",
+                            "doc": "The user whose product received the unlike",
+                            "type": "long"
+                        },
+                        {
+                            "name": "productId",
+                            "doc": "The product that was unliked",
+                            "type": "long"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
