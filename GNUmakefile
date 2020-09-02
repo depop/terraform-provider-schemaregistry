@@ -59,7 +59,8 @@ test-compile:
 	fi
 	go test -c $(TEST) $(TESTARGS)
 
-install: build
+install:
+	go build -o ${BINARY}
 	mkdir -p ~/.terraform.d/plugins/${OS_ARCH}
 	mv ${BINARY} ~/.terraform.d/plugins/${OS_ARCH}/${BINARY}
 

@@ -4,7 +4,7 @@
 
 ```hcl
 provider "schemaregistry" {
-  registry_host = "localhost:8081"
+  registry_host = "http://localhost:8081"
 }
 
 resource "registry_subject_schema" "schema" {
@@ -19,5 +19,5 @@ resource "registry_subject_schema" "schema" {
     version = "1"
   }
 }
-
 ```
+
