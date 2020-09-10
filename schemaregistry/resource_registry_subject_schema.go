@@ -13,7 +13,7 @@ import (
 	registry "github.com/dblooman/schema-registry-client/client"
 	"github.com/dblooman/schema-registry-client/client/operations"
 	"github.com/dblooman/schema-registry-client/models"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func resourceRegistrySubjectSchema() *schema.Resource {
@@ -176,6 +176,7 @@ func resourceSchemaRegistrySubjectUpdate(d *schema.ResourceData, meta interface{
 	}
 
 	d.SetId(fmt.Sprintf("%s-%v", subject, schemaResp.Payload.ID))
+	d.Set("subject", subject)
 	d.Set("schema", schemaResp.Payload.Schema)
 	d.Set("version", fmt.Sprint(schemaResp.Payload.Version))
 
@@ -184,13 +185,9 @@ func resourceSchemaRegistrySubjectUpdate(d *schema.ResourceData, meta interface{
 
 func resourceSchemaRegistrySubjectDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*registry.Registry)
-	ctx := context.Background()
 	subject := d.Get("subject").(string)
 
-	_, err := client.Operations.DeleteSubject(&operations.DeleteSubjectParams{
-		Subject: subject,
-		Context: ctx,
-	})
+	err := deleteSchemaVersion(client, subject)
 	if err != nil {
 		return err
 	}
@@ -275,6 +272,19 @@ func getSchemaVersion(client *registry.Registry, subject, version string) (*oper
 		return nil, err
 	}
 	return schemaResp, nil
+}
+
+func deleteSchemaVersion(client *registry.Registry, subject string) error {
+	ctx := context.Background()
+
+	_, err := client.Operations.DeleteSubject(&operations.DeleteSubjectParams{
+		Subject: subject,
+		Context: ctx,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func testCompatibility(client *registry.Registry, subject, schema, schemaType, version string, references []*models.SchemaReference) (*operations.TestCompatibilityBySubjectNameOK, error) {
