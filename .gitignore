@@ -1,5 +1,5 @@
 .DS_Store
-terraform-provider-hashicups
+terraform-provider-schemaregistry
 bin
 
 # Local .terraform directories
@@ -8,6 +8,7 @@ bin
 # .tfstate files
 *.tfstate
 *.tfstate.*
+.terraform/
 
 # Crash log files
 crash.log
