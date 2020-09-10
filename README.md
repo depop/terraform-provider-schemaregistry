@@ -7,17 +7,23 @@ provider "schemaregistry" {
   registry_host = "http://localhost:8081"
 }
 
-resource "registry_subject_schema" "schema" {
-  subject       = "schema"
+resource "schemaregistry_subject_schema" "test" {
+  subject       = "testing1"
   schema_type   = "AVRO"
   compatibility = "BACKWARD"
-  schema        = file("schema.avsc")
-
-  reference {
-    name    = "Reference1"
-    subject = "event-value"
-    version = "1"
-  }
+  schema        = <<-EOF
+{
+    "type": "record",
+    "name": "Test",
+    "namespace": "com.terraform.model",
+    "fields": [
+        {
+            "name": "eventType",
+            "type": "string"
+        }
+    ]
+}
+EOF
 }
 ```
 
