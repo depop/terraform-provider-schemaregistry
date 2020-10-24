@@ -61,8 +61,8 @@ test-compile:
 
 install:
 	go build -o ${BINARY}
-	mkdir -p ~/.terraform.d/plugins/${OS_ARCH}
-	mv ${BINARY} ~/.terraform.d/plugins/${OS_ARCH}/${BINARY}
+	mkdir -p ~/.terraform.d/plugins/terraform.depop.com/platform/schemaregistry/0.2.0/${OS_ARCH}
+	mv ${BINARY} ~/.terraform.d/plugins/terraform.depop.com/platform/schemaregistry/0.2.0/${OS_ARCH}/${BINARY}_v0.2.0
 
 
 .PHONY: build gen test testacc fmt fmtcheck lint test-compile depscheck docscheck

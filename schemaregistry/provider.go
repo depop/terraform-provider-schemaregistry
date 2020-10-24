@@ -19,6 +19,16 @@ func Provider() terraform.ResourceProvider {
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("REGISTRY_HOST", nil),
 			},
+			"username": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("REGISTRY_USERNAME", nil),
+			},
+			"password": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("REGISTRY_PASSWORD", nil),
+			},
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -37,6 +47,13 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	transport.Producers["application/vnd.schemaregistry+json"] = runtime.JSONProducer()
 	transport.Producers["application/vnd.schemaregistry.v1+json"] = runtime.JSONProducer()
 	transport.Producers["application/json"] = runtime.JSONProducer()
+	if username, ok := d.GetOk("username"); ok {
+		transport.DefaultAuthentication = newBasicAuth(username.(string), d.Get("password").(string))
+	}
 
 	return registry.New(transport, nil), nil
+}
+
+func newBasicAuth(username, password string) runtime.ClientAuthInfoWriter {
+	return httptransport.BasicAuth(username, password)
 }
